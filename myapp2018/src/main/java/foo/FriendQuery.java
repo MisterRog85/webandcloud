@@ -23,6 +23,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.KeyRange;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 
@@ -41,8 +43,13 @@ public class FriendQuery extends HttpServlet {
 //		e.setProperty("age", r.nextInt(100) + 1);
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Friend").setFilter(new FilterPredicate("firstName", FilterOperator.EQUAL, "first0"));
-
+		//Query q = new Query("Friend").setFilter(new FilterPredicate("firstName", FilterOperator.EQUAL, "first0"));
+		CompositeFilter marequete= CompositeFilterOperator.and(new FilterPredicate("friends", FilterOperator.EQUAL, "f94"), 
+															   new FilterPredicate("friends", FilterOperator.EQUAL, "f93"),
+															   new FilterPredicate("age", FilterOperator.EQUAL, 67));
+		Query q = new Query("Friend").setFilter(marequete);
+//		q.setFilter(new FilterPredicate("friend", FilterOperator.EQUAL, "f93"));
+//		q.setFilter(new FilterPredicate("age", FilterOperator.EQUAL, "67"));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 
